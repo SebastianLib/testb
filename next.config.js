@@ -1,5 +1,4 @@
 const nextConfig = {
-  output: "export",
   images: {
     remotePatterns: [
       {
@@ -8,7 +7,6 @@ const nextConfig = {
         port: "",
       },
     ],
-    unoptimized: true,
   },
 };
 
