@@ -5,6 +5,8 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
+export const revalidate = 30; // revalidate at most 30 seconds
+
 async function getData() {
   const query = `
   *[_type == 'blog'] | order(_createdAt desc) {
@@ -14,19 +16,18 @@ async function getData() {
       titleImage
   }`;
 
-  const data = await client.fetch(query,{},{ next: { revalidate: 30 } })
+  const data = await client.fetch(query);
 
   return data;
 }
 
 export default async function Home() {
   const data: simpleBlogCard[] = await getData();
-  const slugs = await client.fetch("*[_type == 'blog'] { 'slug': slug.current }")
-  console.log(slugs);
-  
+
+  console.log(data);
+
   return (
     <div className="grid grid-cols-1  md:grid-cols-2 mt-5 gap-5">
-            <Link href={"/elo"}>elo</Link>
       {data.map((post, idx) => (
         <Card key={idx}>
           <Image
@@ -43,7 +44,7 @@ export default async function Home() {
               {post.smallDescription}
             </p>
             <Button asChild className="w-full mt-7">
-              <Link href={`/blog/${post.currentSlug}`}>Read sssMore</Link>
+              <Link href={`/blog/${post.currentSlug}`}>Read More</Link>
             </Button>
           </CardContent>
         </Card>
